@@ -8,7 +8,8 @@
     "build": "npm run build:native && npm run build:ts",
     "start": "node dist/index.js",
     "dev": "npm run build && nodemon dist/index.js",
-    "clean": "rm -rf build dist"
+    "clean": "rm -rf build dist",
+    "test": "jest"
   },
   "dependencies": {
     "discord.js": "^14.14.1",
@@ -16,10 +17,13 @@
     "node-addon-api": "^8.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.11.30",
-    "typescript": "^5.4.3",
+    "jest": "^30.2.0",
     "node-gyp": "^10.1.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "ts-jest": "^29.4.6",
+    "typescript": "^5.4.3"
   },
   "engines": {
     "node": ">=18.0.0"
