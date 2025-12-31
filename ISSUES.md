@@ -32,16 +32,16 @@ const native: NativeAddon = require('../build/Release/zako_itit.node');
 
 ---
 
-## Issue 2: Memory Safety Issue in `list_issues` Function
+## Issue 2: Caller Audit for `list_issues` Return Value
 
-**Type:** Bug / Memory Safety
-**Severity:** High
-**Location:** `native/src/issue_ops.c`, lines 127-135
+**Type:** Code Quality / Audit
+**Severity:** Low
+**Location:** `native/src/issue_ops.c`, lines 127-135 and callers in `addon.c`
 
 ### Description
-In the `list_issues` function, if `realloc` fails after successfully processing some issues, the code frees the original pointer and returns 0, but the caller may have already processed partial data. Additionally, on realloc failure, the original memory is freed but `*issues` is set to `NULL` which could cause issues if the caller doesn't check the return value.
+In the `list_issues` function, if `realloc` fails, the code correctly frees the original pointer, sets `*issues` to `NULL`, and returns 0 to indicate failure. This is the correct approach to prevent memory leaks. However, callers should be audited to ensure they properly check the return value before using the issues pointer.
 
-### Current Code
+### Current Code (Correctly Implemented)
 ```c
 Issue *new_issues = (Issue *)realloc(*issues, capacity * sizeof(Issue));
 if (new_issues == NULL) {
@@ -52,8 +52,8 @@ if (new_issues == NULL) {
 }
 ```
 
-### Suggested Fix
-The code is actually correct in handling this case, but callers should be audited to ensure they check the return value before using the issues pointer.
+### Suggested Action
+Audit all callers of `list_issues` to verify they check the return value before accessing the issues array. The current implementation in `addon.c` (`ListIssues` function) correctly checks the return value.
 
 ---
 
@@ -101,9 +101,11 @@ Add validation before casting:
 ```c
 if (tag < 0 || tag > 2) {
     napi_throw_range_error(env, NULL, "Tag must be 0, 1, or 2");
-    goto cleanup;
+    return NULL;
 }
 ```
+
+Note: The TypeScript code in `handleModalSubmit` does validate the tag value, but having validation in the native layer provides defense-in-depth.
 
 ---
 
@@ -126,9 +128,7 @@ Add validation before the call:
 ```c
 if (new_status < 0 || new_status > 3) {
     napi_throw_range_error(env, NULL, "Status must be 0, 1, 2, or 3");
-    napi_value return_value;
-    napi_get_boolean(env, false, &return_value);
-    return return_value;
+    return NULL;
 }
 ```
 
@@ -222,34 +222,37 @@ Implement rate limiting per user for commands like `/issue new`.
 
 ---
 
-## Issue 11: Deleted Issues Still Returned in List
+## Issue 11: Consider Filtering Deleted Issues by Default
 
-**Type:** Bug / UX
+**Type:** Enhancement / UX
 **Severity:** Low
 **Location:** `native/src/issue_ops.c`, `list_issues` function
 
 ### Description
-By default, `list_issues` returns all issues including deleted ones. Users should probably not see deleted issues by default in the list.
+The `list_issues` function returns all issues unless explicitly filtered by status. Users can filter by status (including filtering out deleted issues by passing status 0, 1, or 2), but there's no documentation on recommended filtering practices.
 
 ### Current Behavior
-All issues are returned regardless of status unless explicitly filtered.
+All issues are returned unless the `status` filter parameter is provided.
 
 ### Suggested Fix
-Consider filtering out deleted issues by default, or document that filtering by status is needed to exclude them.
+Consider one of:
+1. Document that users should filter by status to exclude deleted issues
+2. Add a convenience parameter to exclude deleted issues by default
+3. Update the `/issue list` command to exclude deleted issues by default unless specifically requested
 
 ---
 
-## Issue 12: Missing Cleanup of Statement on Error Path
+## Issue 12: Code Structure Could Be More Resilient
 
-**Type:** Bug / Resource Leak
-**Severity:** Low
+**Type:** Code Quality
+**Severity:** Very Low
 **Location:** `native/src/addon.c`, `CreateIssue` function
 
 ### Description
-In the `CreateIssue` function, if input validation fails (e.g., name too long), the code jumps to cleanup but no SQLite statement has been prepared yet, so this is fine. However, if `goto cleanup` is reached after `sqlite3_prepare_v2` in future modifications, there could be a leak. The current code is safe but fragile.
+In the `CreateIssue` function, input validation correctly jumps to cleanup on errors. The current code is safe because no SQLite statement is prepared before the validation checks. This is noted as a code quality observation for future maintenance.
 
-### Suggested Fix
-Structure the code to be more resilient to future changes by explicitly handling statement cleanup.
+### Suggested Action
+When adding new code to this function, ensure that resources are properly tracked for cleanup. Consider adding comments to indicate that the cleanup label is safe because no statement has been prepared at that point.
 
 ---
 
@@ -258,7 +261,7 @@ Structure the code to be more resilient to future changes by explicitly handling
 | Issue | Type | Severity | Status |
 |-------|------|----------|--------|
 | #1 | Type Safety | Medium | Open |
-| #2 | Memory Safety | High | Open |
+| #2 | Code Quality | Low | Open |
 | #3 | Code Quality | Low | Open |
 | #4 | Input Validation | Medium | Open |
 | #5 | Input Validation | Medium | Open |
@@ -267,5 +270,5 @@ Structure the code to be more resilient to future changes by explicitly handling
 | #8 | UX | Low | Open |
 | #9 | Enhancement | Medium | Open |
 | #10 | Security | Medium | Open |
-| #11 | Bug/UX | Low | Open |
-| #12 | Resource Leak | Low | Open |
+| #11 | Enhancement | Low | Open |
+| #12 | Code Quality | Very Low | Open |
