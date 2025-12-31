@@ -93,6 +93,10 @@ napi_value CreateIssue(napi_env env, napi_callback_info info) {
 
     int32_t tag;
     napi_get_value_int32(env, args[2], &tag);
+    if (tag < 0 || tag > 2) {
+        napi_throw_range_error(env, NULL, "Tag must be 0, 1, or 2");
+        goto cleanup;
+    }
 
     size_t user_id_len;
     napi_get_value_string_utf8(env, args[3], NULL, 0, &user_id_len);
@@ -206,6 +210,10 @@ napi_value UpdateIssueStatus(napi_env env, napi_callback_info info) {
     int32_t id, new_status;
     napi_get_value_int32(env, args[0], &id);
     napi_get_value_int32(env, args[1], &new_status);
+    if (new_status < 0 || new_status > 3) {
+        napi_throw_range_error(env, NULL, "Status must be 0, 1, 2, or 3");
+        return NULL;
+    }
 
     int result = update_issue_status(id, (IssueStatus)new_status);
 
