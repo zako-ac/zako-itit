@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 RUN apk add --no-cache build-base python3 sqlite-dev
 
@@ -13,13 +13,15 @@ COPY native/ ./native/
 
 RUN npm run build
 
-FROM node:18-alpine AS deps
+FROM node:20-alpine AS deps
 
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev
 
-FROM node:18-alpine
+FROM node:20-alpine
+
+RUN apk update && apk upgrade --no-cache
 
 RUN apk add --no-cache sqlite-libs su-exec
 
