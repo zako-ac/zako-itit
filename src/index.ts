@@ -10,8 +10,9 @@ import { handleIssueDelete } from './commands/issue/delete';
 import { handleIssueExport } from './commands/issue/export';
 import { handleModalSubmit } from './interactions/modals';
 import { handleButtonInteraction } from './interactions/buttons';
+import type { NativeAddon } from './types/native';
 
-const native = require('../build/Release/zako_itit.node');
+const native: NativeAddon = require('../build/Release/zako_itit.node');
 
 async function main() {
   console.log('Initializing database...');

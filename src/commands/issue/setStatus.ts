@@ -2,8 +2,9 @@ import { ChatInputCommandInteraction } from 'discord.js';
 import { buildSuccessEmbed, buildErrorEmbed } from '../../components/embeds';
 import { isAdmin } from '../../utils/permissions';
 import { STATUS_NAMES } from '../../types/issue';
+import type { NativeAddon } from '../../types/native';
 
-const native = require('../../../build/Release/zako_itit.node');
+const native: NativeAddon = require('../../../build/Release/zako_itit.node');
 
 export async function handleIssueSetStatus(interaction: ChatInputCommandInteraction): Promise<void> {
   if (!isAdmin(interaction.user.id)) {

@@ -3,8 +3,9 @@ import { buildIssueListEmbed } from '../components/embeds';
 import { createPaginationButtons } from '../components/buttons';
 import { paginateIssues } from '../utils/pagination';
 import { config } from '../config/env';
+import type { NativeAddon } from '../types/native';
 
-const native = require('../../build/Release/zako_itit.node');
+const native: NativeAddon = require('../../build/Release/zako_itit.node');
 
 export async function handleButtonInteraction(interaction: ButtonInteraction): Promise<void> {
   const parts = interaction.customId.split(':');
