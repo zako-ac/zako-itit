@@ -6,6 +6,11 @@
 #include "issue_ops.h"
 #include "../include/types.h"
 
+/*
+ * Maximum string lengths for validation (excluding null terminator).
+ * These are one less than the corresponding array sizes in types.h
+ * (name[256], detail[2048], user_id[64]) to reserve space for null termination.
+ */
 #define MAX_NAME_LEN 255
 #define MAX_DETAIL_LEN 2047
 #define MAX_USERID_LEN 63
