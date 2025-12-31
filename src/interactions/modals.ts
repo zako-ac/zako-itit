@@ -1,8 +1,9 @@
 import { ModalSubmitInteraction } from 'discord.js';
 import { buildSuccessEmbed, buildErrorEmbed } from '../components/embeds';
 import { IssueTag } from '../types/issue';
+import type { NativeAddon } from '../types/native';
 
-const native = require('../../build/Release/zako_itit.node');
+const native: NativeAddon = require('../../build/Release/zako_itit.node');
 
 export async function handleModalSubmit(interaction: ModalSubmitInteraction): Promise<void> {
   if (interaction.customId === 'ISSUE_MODAL') {

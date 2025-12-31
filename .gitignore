@@ -5,6 +5,9 @@ node_modules/
 dist/
 build/
 
+# Test coverage
+coverage/
+
 # Environment variables
 .env
 
@@ -35,4 +38,4 @@ tmp/
 temp/
 
 # CodeQL
-_codeql_detected_source_root
+_codeql*

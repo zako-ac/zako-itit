@@ -1,7 +1,8 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { buildIssueEmbed, buildErrorEmbed } from '../../components/embeds';
+import type { NativeAddon } from '../../types/native';
 
-const native = require('../../../build/Release/zako_itit.node');
+const native: NativeAddon = require('../../../build/Release/zako_itit.node');
 
 export async function handleIssueGet(interaction: ChatInputCommandInteraction): Promise<void> {
   const id = interaction.options.getInteger('id', true);
