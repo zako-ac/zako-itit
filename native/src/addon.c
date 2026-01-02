@@ -50,6 +50,10 @@ napi_value InitDatabase(napi_env env, napi_callback_info info) {
     size_t str_len;
     napi_get_value_string_utf8(env, args[0], NULL, 0, &str_len);
     char *db_path = (char *)malloc(str_len + 1);
+    if (db_path == NULL) {
+        napi_throw_error(env, NULL, "Memory allocation failed for database path");
+        return NULL;
+    }
     napi_get_value_string_utf8(env, args[0], db_path, str_len + 1, NULL);
 
     int result = init_database(db_path);
