@@ -3,20 +3,20 @@
 Thank you for considering contributing to zako-itit! This document outlines the steps and guidelines to make contributions smoother and consistent.
 
 ## Table of Contents
-- Purpose
-- Code of Conduct
-- How to Report Bugs
-- How to Propose Features
-- Development Setup
-- Discord Bot Development
-- Branching and Workflow
-- Coding Style
-- Database Schema Changes
-- Commit Message Guidelines
-- Pull Request Process
-- Tests and CI
-- Language and Communication
-- Templates
+- [Purpose](#purpose)
+- [Code of Conduct](#code-of-conduct)
+- [How to Report Bugs](#how-to-report-bugs)
+- [How to Propose Features](#how-to-propose-features)
+- [Development Setup](#development-setup)
+- [Discord Bot Development](#discord-bot-development)
+- [Branching and Workflow](#branching-and-workflow)
+- [Coding Style](#coding-style)
+- [Database Schema Changes](#database-schema-changes)
+- [Commit Message Guidelines](#commit-message-guidelines)
+- [Pull Request Process](#pull-request-process)
+- [Tests and CI](#tests-and-ci)
+- [Language and Communication](#language-and-communication)
+- [Templates](#templates)
 
 ## Purpose
 zako-itit is a hybrid TypeScript + C Discord bot for issue tracking. The bot uses discord.js v14 for Discord integration, a native C addon (N-API) for database operations with SQLite, and Jest for testing.
