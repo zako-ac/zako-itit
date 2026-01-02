@@ -2,6 +2,7 @@ import { Client, GatewayIntentBits, Interaction } from 'discord.js';
 import { config } from './config/env';
 import { registerCommands } from './commands';
 import { handlePing } from './commands/ping';
+import { handleStatus } from './commands/status';
 import { handleIssueNew } from './commands/issue/new';
 import { handleIssueGet } from './commands/issue/get';
 import { handleIssueList } from './commands/issue/list';
@@ -53,6 +54,8 @@ async function main() {
       if (interaction.isChatInputCommand()) {
         if (interaction.commandName === 'ping') {
           await handlePing(interaction);
+        } else if (interaction.commandName === 'status') {
+          await handleStatus(interaction);
         } else if (interaction.commandName === 'issue') {
           const subcommand = interaction.options.getSubcommand();
 

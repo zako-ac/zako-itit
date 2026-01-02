@@ -26,6 +26,11 @@ const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [
     .toJSON(),
 
   new SlashCommandBuilder()
+    .setName('status')
+    .setDescription('Show server status and resource usage')
+    .toJSON(),
+
+  new SlashCommandBuilder()
     .setName('issue')
     .setDescription('Issue tracking commands')
     .addSubcommand(subcommand =>
