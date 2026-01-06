@@ -5,6 +5,9 @@ node_modules/
 dist/
 build/
 
+# Generated files
+src/constants/limits.generated.ts
+
 # Test coverage
 coverage/
 

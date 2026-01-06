@@ -3,9 +3,12 @@
   "version": "1.2.0",
   "main": "dist/index.js",
   "scripts": {
+    "generate:constants": "node scripts/generate-constants.js",
+    "prebuild:native": "npm run generate:constants",
     "build:native": "node-gyp rebuild",
     "build:ts": "tsc",
     "build": "npm run build:native && npm run build:ts",
+    "postinstall": "npm run generate:constants",
     "start": "node dist/index.js",
     "dev": "npm run build && nodemon dist/index.js",
     "clean": "rm -rf build dist",

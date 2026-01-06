@@ -5,15 +5,7 @@
 #include "database.h"
 #include "issue_ops.h"
 #include "../include/types.h"
-
-/*
- * Maximum string lengths for validation (excluding null terminator).
- * These are one less than the corresponding array sizes in types.h
- * (name[256], detail[2048], user_id[64]) to reserve space for null termination.
- */
-#define MAX_NAME_LEN 255
-#define MAX_DETAIL_LEN 2047
-#define MAX_USERID_LEN 63
+#include "../include/constants.h"
 
 napi_value issue_to_js(napi_env env, Issue *issue) {
     napi_value obj;
@@ -83,7 +75,10 @@ napi_value CreateIssue(napi_env env, napi_callback_info info) {
     size_t name_len;
     napi_get_value_string_utf8(env, args[0], NULL, 0, &name_len);
     if (name_len > MAX_NAME_LEN) {
-        napi_throw_range_error(env, NULL, "Name exceeds maximum length (255)");
+        char error_msg[128];
+        snprintf(error_msg, sizeof(error_msg),
+                 "Name exceeds maximum length (%d)", MAX_NAME_LEN);
+        napi_throw_range_error(env, NULL, error_msg);
         goto cleanup;
     }
     name = (char *)malloc(name_len + 1);
@@ -93,7 +88,10 @@ napi_value CreateIssue(napi_env env, napi_callback_info info) {
     size_t detail_len;
     napi_get_value_string_utf8(env, args[1], NULL, 0, &detail_len);
     if (detail_len > MAX_DETAIL_LEN) {
-        napi_throw_range_error(env, NULL, "Detail exceeds maximum length (2047)");
+        char error_msg[128];
+        snprintf(error_msg, sizeof(error_msg),
+                 "Detail exceeds maximum length (%d)", MAX_DETAIL_LEN);
+        napi_throw_range_error(env, NULL, error_msg);
         goto cleanup;
     }
     detail = (char *)malloc(detail_len + 1);
@@ -110,7 +108,10 @@ napi_value CreateIssue(napi_env env, napi_callback_info info) {
     size_t user_id_len;
     napi_get_value_string_utf8(env, args[3], NULL, 0, &user_id_len);
     if (user_id_len > MAX_USERID_LEN) {
-        napi_throw_range_error(env, NULL, "UserId exceeds maximum length (63)");
+        char error_msg[128];
+        snprintf(error_msg, sizeof(error_msg),
+                 "UserId exceeds maximum length (%d)", MAX_USERID_LEN);
+        napi_throw_range_error(env, NULL, error_msg);
         goto cleanup;
     }
     user_id = (char *)malloc(user_id_len + 1);

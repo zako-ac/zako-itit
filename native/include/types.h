@@ -1,6 +1,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include "constants.h"
+
 typedef enum {
     TAG_BUG = 0,
     TAG_FEATURE = 1,
@@ -17,15 +19,14 @@ typedef enum {
 typedef struct {
     int id;
     /*
-     * Note: Array sizes include space for the null terminator.
-     * MAX_NAME_LEN (255), MAX_DETAIL_LEN (2047), and MAX_USERID_LEN (63)
-     * in addon.c are one less than these sizes to allow for null termination.
+     * Array sizes are [MAX_*_LEN + 1] to accommodate null terminator.
+     * See constants.h for the source definitions.
      */
-    char name[256];
-    char detail[2048];
+    char name[MAX_NAME_LEN + 1];      // 256 bytes
+    char detail[MAX_DETAIL_LEN + 1];  // 2001 bytes (updated from 2048)
     IssueTag tag;
     IssueStatus status;
-    char user_id[64];
+    char user_id[MAX_USERID_LEN + 1]; // 64 bytes
 } Issue;
 
 #endif // TYPES_H
