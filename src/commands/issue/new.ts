@@ -5,6 +5,7 @@ import {
   TextInputStyle,
   ActionRowBuilder
 } from 'discord.js';
+import { MAX_NAME_LEN, MAX_DETAIL_LEN } from '../../constants/limits.generated';
 
 export async function handleIssueNew(interaction: ChatInputCommandInteraction): Promise<void> {
   const modal = new ModalBuilder()
@@ -16,7 +17,7 @@ export async function handleIssueNew(interaction: ChatInputCommandInteraction): 
     .setLabel('Issue Name')
     .setStyle(TextInputStyle.Short)
     .setRequired(true)
-    .setMaxLength(255);
+    .setMaxLength(MAX_NAME_LEN);
 
   const tagInput = new TextInputBuilder()
     .setCustomId('issue_tag')
@@ -30,7 +31,7 @@ export async function handleIssueNew(interaction: ChatInputCommandInteraction): 
     .setLabel('Issue Detail')
     .setStyle(TextInputStyle.Paragraph)
     .setRequired(true)
-    .setMaxLength(2000);
+    .setMaxLength(MAX_DETAIL_LEN);
 
   const firstRow = new ActionRowBuilder<TextInputBuilder>().addComponents(nameInput);
   const secondRow = new ActionRowBuilder<TextInputBuilder>().addComponents(tagInput);

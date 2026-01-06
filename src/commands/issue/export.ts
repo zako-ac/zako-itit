@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, AttachmentBuilder } from 'discord.js';
 import { buildSuccessEmbed } from '../../components/embeds';
+import { JSON_EMBED_THRESHOLD } from '../../constants/limits.generated';
 import type { NativeAddon } from '../../types/native';
 
 const native: NativeAddon = require('../../../build/Release/zako_itit.node');
@@ -10,7 +11,7 @@ export async function handleIssueExport(interaction: ChatInputCommandInteraction
   const issues = native.listIssues(tag, null);
   const jsonContent = JSON.stringify(issues, null, 2);
 
-  if (jsonContent.length < 2000) {
+  if (jsonContent.length < JSON_EMBED_THRESHOLD) {
     const embed = buildSuccessEmbed('Issues Export', `\`\`\`json\n${jsonContent}\n\`\`\``);
     await interaction.reply({ embeds: [embed] });
   } else {

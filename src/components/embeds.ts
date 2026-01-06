@@ -1,6 +1,7 @@
 import { EmbedBuilder, ColorResolvable } from 'discord.js';
 import { Issue, TAG_NAMES, STATUS_NAMES } from '../types/issue';
 import { PaginatedResult } from '../utils/pagination';
+import { DETAIL_PREVIEW_LEN } from '../constants/limits.generated';
 
 const COLORS = {
   SUCCESS: 0x00FF00 as ColorResolvable,
@@ -50,7 +51,7 @@ export function buildIssueListEmbed(
   } else {
     for (const issue of result.items) {
       const fieldValue = [
-        `**Detail:** ${issue.detail.length > 100 ? issue.detail.substring(0, 100) + '...' : issue.detail}`,
+        `**Detail:** ${issue.detail.length > DETAIL_PREVIEW_LEN ? issue.detail.substring(0, DETAIL_PREVIEW_LEN) + '...' : issue.detail}`,
         `**Tag:** ${TAG_NAMES[issue.tag]} | **Status:** ${STATUS_NAMES[issue.status]}`,
         `**Created by:** <@${issue.userId}>`
       ].join('\n');
